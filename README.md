@@ -13,10 +13,8 @@ The project follows a **modular design principle**, where each module has a spec
 ## 👥 Team Members
 
 - Group 17
-  - Student 1
-  - Student 2
-  - Student 3
-  - Student 4
+  - Mukund Rakholiya (2024UCP1163)
+  - Lakshay Ahuja    (2024UCP1157)
 
 ---
 
