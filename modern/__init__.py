@@ -1,0 +1,3 @@
+"""
+Modern Cryptography Module
+"""

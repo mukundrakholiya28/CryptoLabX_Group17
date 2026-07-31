@@ -1,0 +1,3 @@
+"""
+Cryptographic Attacks Module
+"""
