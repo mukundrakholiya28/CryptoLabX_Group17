@@ -1,0 +1,21 @@
+# CryptoLabX - Project Dependencies
+
+# Cryptography libraries
+cryptography>=41.0.0
+
+# Scientific computing
+numpy>=1.24.0
+scipy>=1.10.0
+
+# Data analysis
+pandas>=2.0.0
+
+# Testing
+pytest>=7.4.0
+pytest-cov>=4.1.0
+
+# Utilities
+pycryptodome>=3.18.0
+
+# Documentation
+sphinx>=7.0.0
