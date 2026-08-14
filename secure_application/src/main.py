@@ -17,10 +17,21 @@ def student_dashboard(student_id):
         choice = input("Enter your choice: ")
 
         if choice == "1":
-            view_grades(student_id)
+            # INTENTIONALLY VULNERABLE: IDOR
+            target_id = input(
+                "Enter student ID whose grades you want to view: "
+            )
+
+            view_grades(target_id)
 
         elif choice == "2":
-            update_profile(student_id)
+            # INTENTIONALLY VULNERABLE:
+            # Allows authenticated user to modify another student's profile.
+            target_id = input(
+                "Enter student ID whose profile you want to update: "
+            )
+
+            update_profile(target_id)
 
         elif choice == "3":
             print("\nLogged out successfully.")

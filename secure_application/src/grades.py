@@ -5,6 +5,8 @@ def view_grades(student_id):
     conn = get_connection()
     cursor = conn.cursor()
 
+    # INTENTIONALLY VULNERABLE:
+    # User-controlled input is directly inserted into SQL.
     query = f"""
         SELECT subject, grade
         FROM grades
@@ -12,16 +14,17 @@ def view_grades(student_id):
     """
 
     cursor.execute(query)
-
     results = cursor.fetchall()
 
     conn.close()
 
     if not results:
-        print("No grades found.")
+        print("\nNo grades found.")
         return
 
-    print("\n===== Student Grades =====")
+    print("\n========== STUDENT GRADES ==========")
 
     for subject, grade in results:
-        print(f"{subject}: {grade}")
+        print(f"{subject:<25} {grade}")
+
+    print("====================================")
