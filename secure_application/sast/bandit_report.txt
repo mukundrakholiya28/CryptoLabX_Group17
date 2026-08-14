@@ -1,0 +1,35 @@
+Run started:2026-08-14 09:33:24.672243+00:00
+
+Test results:
+>> Issue: [B608:hardcoded_sql_expressions] Possible SQL injection vector through string-based query construction.
+   Severity: Medium   Confidence: Low
+   CWE: CWE-89 (https://cwe.mitre.org/data/definitions/89.html)
+   More Info: https://bandit.readthedocs.io/en/1.9.4/plugins/b608_hardcoded_sql_expressions.html
+   Location: src/grades.py:8:12
+7	
+8	    query = f"""
+9	        SELECT subject, grade
+10	        FROM grades
+11	        WHERE student_id = {student_id}
+12	    """
+13	
+
+--------------------------------------------------
+
+Code scanned:
+	Total lines of code: 127
+	Total lines skipped (#nosec): 0
+	Total potential issues skipped due to specifically being disabled (e.g., #nosec BXXX): 0
+
+Run metrics:
+	Total issues (by severity):
+		Undefined: 0
+		Low: 0
+		Medium: 1
+		High: 0
+	Total issues (by confidence):
+		Undefined: 0
+		Low: 1
+		Medium: 0
+		High: 0
+Files skipped (0):
