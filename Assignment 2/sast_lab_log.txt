@@ -1,0 +1,277 @@
+﻿**********************
+Windows PowerShell transcript start
+Start time: 20260807144432
+Username: LOQ-7286\mukun
+RunAs User: LOQ-7286\mukun
+Configuration Name: 
+Machine: LOQ-7286 (Microsoft Windows NT 10.0.26200.0)
+Host Application: C:\WINDOWS\System32\WindowsPowerShell\v1.0\powershell.exe -noexit -command try { . "c:\Users\mukun\AppData\Local\Programs\Microsoft VS Code\e4c7e7b1d6\resources\app\out\vs\workbench\contrib\terminal\common\scripts\shellIntegration.ps1" } catch {}
+Process ID: 23956
+PSVersion: 5.1.26100.8972
+PSEdition: Desktop
+PSCompatibleVersions: 1.0, 2.0, 3.0, 4.0, 5.0, 5.1.26100.8972
+BuildVersion: 10.0.26100.8972
+CLRVersion: 4.0.30319.42000
+WSManStackVersion: 3.0
+PSRemotingProtocolVersion: 2.3
+SerializationVersion: 1.1.0.1
+**********************
+Transcript started, output file is sast_lab_log.txt
+PS>ParameterBinding(Out-File): name="InputObject"; value="try { . "c:\Users\mukun\AppData\Local\Programs\Microsoft VS Code\e4c7e7b1d6\resources\app\out\vs\workbench\contrib\terminal\common\scripts\shellIntegration.ps1" } catch {}"
+]633;D;0]633;A]633;P;Cwd=C:\x5cMk\x5cProjects\x5cStatic-Application-Security-Testing-SAST-ToolsPS C:\Mk\Projects\Static-Application-Security-Testing-SAST-Tools> ]633;B
+PS># Verify Python and pip
+python --version
+pip --version
+
+# Install Bandit
+pip install bandit
+
+# Verify Bandit installation
+bandit --version
+Python 3.11.9
+pip 26.2.1 from C:\Users\mukun\AppData\Local\Programs\Python\Python311\Lib\site-packages\pip (python 3.11)
+Requirement already satisfied: pygments<3.0.0,>=2.13.0 in C:\Users\mukun\AppData\Local\Programs\Python\Python311\Li
+b\site-packages (from rich->bandit) (2.19.2)
+Requirement already satisfied: mdurl~=0.1 in C:\Users\mukun\AppData\Local\Programs\Python\Python311\Lib\site-packag
+es (from markdown-it-py>=2.2.0->rich->bandit) (0.1.2)
+
+]633;D;0]633;A]633;P;Cwd=C:\x5cMk\x5cProjects\x5cStatic-Application-Security-Testing-SAST-ToolsPS C:\Mk\Projects\Static-Application-Security-Testing-SAST-Tools> ]633;B
+PS>@'
+import hashlib
+import os
+
+def authenticate_user():
+    # Flaw 1: Hardcoded credential string (Bandit: B105)
+    api_key = "secret_api_key_9988776655"
+    
+    # Flaw 2: Insecure hash function MD5 (Bandit: B303/B324)
+    user_password = "UserPassword123"
+    password_hash = hashlib.md5(user_password.encode()).hexdigest()
+    
+    return api_key, password_hash
+
+def execute_user_command(user_input):
+    # Flaw 3: Dangerous dynamic code evaluation (Bandit: B307)
+    eval(user_input)
+    
+    # Flaw 4: Command injection via shell system call (Bandit: B605)
+    os.system("echo " + user_input)
+
+if __name__ == "__main__":
+    key, p_hash = authenticate_user()
+    execute_user_command("print('Testing SAST Analysis')")
+'@ | Out-File -Encoding utf8 vulnerable_app.py
+
+# Verify file creation
+Get-Content vulnerable_app.py
+import hashlib
+import os
+
+def authenticate_user():
+    # Flaw 1: Hardcoded credential string (Bandit: B105)
+    api_key = "secret_api_key_9988776655"
+
+    # Flaw 2: Insecure hash function MD5 (Bandit: B303/B324)
+    user_password = "UserPassword123"
+    password_hash = hashlib.md5(user_password.encode()).hexdigest()
+
+    return api_key, password_hash
+
+def execute_user_command(user_input):
+    # Flaw 3: Dangerous dynamic code evaluation (Bandit: B307)
+    eval(user_input)
+
+    # Flaw 4: Command injection via shell system call (Bandit: B605)
+    os.system("echo " + user_input)
+
+if __name__ == "__main__":
+    key, p_hash = authenticate_user()
+    execute_user_command("print('Testing SAST Analysis')")
+]633;D;0]633;A]633;P;Cwd=C:\x5cMk\x5cProjects\x5cStatic-Application-Security-Testing-SAST-ToolsPS C:\Mk\Projects\Static-Application-Security-Testing-SAST-Tools> ]633;B
+PS># Standard terminal scan (Human-readable)
+bandit -r vulnerable_app.py
+
+# Export scan results to JSON format (Machine-readable)
+bandit -r vulnerable_app.py -f json -o bandit_results.json
+
+# Display JSON output
+Get-Content bandit_results.json
+
+
+{
+  "errors": [],
+  "generated_at": "2026-08-07T09:14:57Z",
+  "metrics": {
+    ".\\vulnerable_app.py": {
+      "CONFIDENCE.HIGH": 3,
+      "CONFIDENCE.LOW": 0,
+      "CONFIDENCE.MEDIUM": 1,
+      "CONFIDENCE.UNDEFINED": 0,
+      "SEVERITY.HIGH": 2,
+      "SEVERITY.LOW": 1,
+      "SEVERITY.MEDIUM": 1,
+      "SEVERITY.UNDEFINED": 0,
+      "loc": 13,
+      "nosec": 0,
+      "skipped_tests": 0
+    },
+    "_totals": {
+      "CONFIDENCE.HIGH": 3,
+      "CONFIDENCE.LOW": 0,
+      "CONFIDENCE.MEDIUM": 1,
+      "CONFIDENCE.UNDEFINED": 0,
+      "SEVERITY.HIGH": 2,
+      "SEVERITY.LOW": 1,
+      "SEVERITY.MEDIUM": 1,
+      "SEVERITY.UNDEFINED": 0,
+      "loc": 13,
+      "nosec": 0,
+      "skipped_tests": 0
+    }
+  },
+  "results": [
+    {
+      "code": "8     # Flaw 2: Insecure hash function MD5 (Bandit: B303/B324)\n9     user_password = \"UserPassword123\"\n10     password_hash = hashlib.md5(user_password.encode()).hexdigest()\n",
+      "col_offset": 20,
+      "end_col_offset": 37,
+      "filename": ".\\vulnerable_app.py",
+      "issue_confidence": "MEDIUM",
+      "issue_cwe": {
+        "id": 259,
+        "link": "https://cwe.mitre.org/data/definitions/259.html"
+      },
+      "issue_severity": "LOW",
+      "issue_text": "Possible hardcoded password: 'UserPassword123'",
+      "line_number": 9,
+      "line_range": [
+        9
+      ],
+      "more_info": "https://bandit.readthedocs.io/en/1.9.4/plugins/b105_hardcoded_password_string.html",
+      "test_id": "B105",
+      "test_name": "hardcoded_password_string"
+    },
+    {
+      "code": "9     user_password = \"UserPassword123\"\n10     password_hash = hashlib.md5(user_password.encode()).hexdigest()\n11     \n",
+      "col_offset": 20,
+      "end_col_offset": 55,
+      "filename": ".\\vulnerable_app.py",
+      "issue_confidence": "HIGH",
+      "issue_cwe": {
+        "id": 327,
+        "link": "https://cwe.mitre.org/data/definitions/327.html"
+      },
+      "issue_severity": "HIGH",
+      "issue_text": "Use of weak MD5 hash for security. Consider usedforsecurity=False",
+      "line_number": 10,
+      "line_range": [
+        10
+      ],
+      "more_info": "https://bandit.readthedocs.io/en/1.9.4/plugins/b324_hashlib.html",
+      "test_id": "B324",
+      "test_name": "hashlib"
+    },
+    {
+      "code": "15     # Flaw 3: Dangerous dynamic code evaluation (Bandit: B307)\n16     eval(user_input)\n17     \n",
+      "col_offset": 4,
+      "end_col_offset": 20,
+      "filename": ".\\vulnerable_app.py",
+      "issue_confidence": "HIGH",
+      "issue_cwe": {
+        "id": 78,
+        "link": "https://cwe.mitre.org/data/definitions/78.html"
+      },
+      "issue_severity": "MEDIUM",
+      "issue_text": "Use of possibly insecure function - consider using safer ast.literal_eval.",
+      "line_number": 16,
+      "line_range": [
+        16
+      ],
+      "more_info": "https://bandit.readthedocs.io/en/1.9.4/blacklists/blacklist_calls.html#b307-eval",
+      "test_id": "B307",
+      "test_name": "blacklist"
+    },
+    {
+      "code": "18     # Flaw 4: Command injection via shell system call (Bandit: B605)\n19     os.system(\"echo \" + user_input)\n20 \n",
+      "col_offset": 4,
+      "end_col_offset": 35,
+      "filename": ".\\vulnerable_app.py",
+      "issue_confidence": "HIGH",
+      "issue_cwe": {
+        "id": 78,
+        "link": "https://cwe.mitre.org/data/definitions/78.html"
+      },
+      "issue_severity": "HIGH",
+      "issue_text": "Starting a process with a shell, possible injection detected, security issue.",
+      "line_number": 19,
+      "line_range": [
+        19
+      ],
+      "more_info": "https://bandit.readthedocs.io/en/1.9.4/plugins/b605_start_process_with_a_shell.html",
+      "test_id": "B605",
+      "test_name": "start_process_with_a_shell"
+    }
+  ]
+}
+]633;D;0]633;A]633;P;Cwd=C:\x5cMk\x5cProjects\x5cStatic-Application-Security-Testing-SAST-ToolsPS C:\Mk\Projects\Static-Application-Security-Testing-SAST-Tools> ]633;B
+PS>Get-History | Select-Object -ExpandProperty CommandLine > command_history.txt
+>> ParameterBinding(Out-File): name="InputObject"; value="try { . "c:\Users\mukun\AppData\Local\Programs\Microsoft VS Code\e4c7e7b1d6\resources\app\out\vs\workbench\contrib\terminal\common\scripts\shellIntegration.ps1" } catch {}"
+>> ParameterBinding(Out-File): name="InputObject"; value="# 1. Start session logging (PowerShell equivalent of 'script')
+Start-Transcript -Path "sast_lab_log.txt"
+
+# 2. Save previous command history
+Get-History | Select-Object -ExpandProperty CommandLine > command_history.txt"
+>> ParameterBinding(Out-File): name="InputObject"; value="# Verify Python and pip
+python --version
+pip --version
+
+# Install Bandit
+pip install bandit
+
+# Verify Bandit installation
+bandit --version"
+>> ParameterBinding(Out-File): name="InputObject"; value="@'
+import hashlib
+import os
+
+def authenticate_user():
+    # Flaw 1: Hardcoded credential string (Bandit: B105)
+    api_key = "secret_api_key_9988776655"
+    
+    # Flaw 2: Insecure hash function MD5 (Bandit: B303/B324)
+    user_password = "UserPassword123"
+    password_hash = hashlib.md5(user_password.encode()).hexdigest()
+    
+    return api_key, password_hash
+
+def execute_user_command(user_input):
+    # Flaw 3: Dangerous dynamic code evaluation (Bandit: B307)
+    eval(user_input)
+    
+    # Flaw 4: Command injection via shell system call (Bandit: B605)
+    os.system("echo " + user_input)
+
+if __name__ == "__main__":
+    key, p_hash = authenticate_user()
+    execute_user_command("print('Testing SAST Analysis')")
+'@ | Out-File -Encoding utf8 vulnerable_app.py
+
+# Verify file creation
+Get-Content vulnerable_app.py"
+>> ParameterBinding(Out-File): name="InputObject"; value="# Standard terminal scan (Human-readable)
+bandit -r vulnerable_app.py
+
+# Export scan results to JSON format (Machine-readable)
+bandit -r vulnerable_app.py -f json -o bandit_results.json
+
+# Display JSON output
+Get-Content bandit_results.json"
+]633;D;0]633;A]633;P;Cwd=C:\x5cMk\x5cProjects\x5cStatic-Application-Security-Testing-SAST-ToolsPS C:\Mk\Projects\Static-Application-Security-Testing-SAST-Tools> ]633;B
+PS># Stop transcript logging
+Stop-Transcript
+
+# Verify log file contents
+Get-Content sast_lab_log.txt -Head 30
+**********************
+Windows PowerShell transcript end
+End time: 20260807144539
+**********************
