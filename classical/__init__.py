@@ -1,3 +1,0 @@
-"""
-Classical Cryptography Algorithms Module
-"""
