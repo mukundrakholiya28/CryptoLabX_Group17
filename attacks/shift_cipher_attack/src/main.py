@@ -1,94 +1,47 @@
-import string
-from shift_cipher import decrypt
+"""
+Main Driver and Benchmarking Script
+"""
 
+import os
+from brute_force_dictionary import load_dictionary, attack_dictionary
+from chi_square_attack import attack_chi_square
+from shift_cipher import encrypt
 
-def load_dictionary(filepath: str) -> set:
-    """Load English words into a set for fast lookup."""
+def main():
+    dict_path = os.path.join(os.path.dirname(__file__), "..", "dictionary", "english_words.txt")
     
-    with open(filepath, "r", encoding="utf-8") as f:
-        return {
-            line.strip().lower()
-            for line in f
-            if line.strip()
-        }
+    if os.path.exists(dict_path):
+        dictionary = load_dictionary(dict_path)
+    else:
+        dictionary = {"the", "quick", "brown", "fox", "jumps", "over", "lazy", "dog",
+                      "cryptography", "is", "essential", "for", "secure", "communication",
+                      "attack", "cipher", "secret", "message", "this", "test"}
 
+    test_corpus = [
+        ("TC1: Standard Sentence", "Cryptography provides confidentiality and integrity.", 7),
+        ("TC2: Short Ambiguous Phrase", "Be back soon", 15),
+        ("TC3: Stripped Whitespace", "CONFIDENTIALMESSAGEFORDIRECTOR", 3),
+        ("TC4: Slang / Technical Jargon", "K8s cluster zero day vulnerability exploit", 11)
+    ]
 
-def attack_dictionary(ciphertext: str, dictionary: set) -> dict:
-    """Try all 26 Shift Cipher keys and select the best plaintext."""
+    print("=" * 88)
+    print(f"{'Test Case':<32} | {'Act Key':<7} | {'Dict Key':<8} | {'Chi Key':<7} | {'Dict Match':<10} | {'Chi Match'}")
+    print("=" * 88)
 
-    best_key = 0
-    best_score = -1.0
-    best_text = ""
-    scores = {}
+    for name, plaintext, key in test_corpus:
+        ciphertext = encrypt(plaintext, key)
+        
+        dict_res = attack_dictionary(ciphertext, dictionary)
+        chi_res = attack_chi_square(ciphertext)
 
-    # Try every possible key
-    for key in range(26):
+        dict_pred = dict_res["predicted_key"]
+        chi_pred = chi_res["predicted_key"]
 
-        # Decrypt using the current key
-        decrypted = decrypt(ciphertext, key)
+        dict_ok = "YES" if dict_pred == key else "NO"
+        chi_ok = "YES" if chi_pred == key else "NO"
 
-        # Remove punctuation
-        clean_text = decrypted.translate(
-            str.maketrans("", "", string.punctuation)
-        )
-
-        # Split plaintext into words
-        tokens = [
-            word.lower()
-            for word in clean_text.split()
-            if word.isalpha()
-        ]
-
-        # Calculate dictionary score
-        if not tokens:
-            score = 0.0
-        else:
-            valid_words = sum(
-                1 for word in tokens
-                if word in dictionary
-            )
-
-            score = valid_words / len(tokens)
-
-        # Store score for this key
-        scores[key] = score
-
-        # Update best result
-        if score > best_score:
-            best_score = score
-            best_key = key
-            best_text = decrypted
-
-    return {
-        "predicted_key": best_key,
-        "predicted_plaintext": best_text,
-        "score": best_score,
-        "all_scores": scores
-    }
-
+        print(f"{name:<32} | {key:<7} | {dict_pred:<8} | {chi_pred:<7} | {dict_ok:<10} | {chi_ok}")
+    print("=" * 88)
 
 if __name__ == "__main__":
-
-    # Load English dictionary
-    dictionary_path = (
-        "dictionary\\english_words.txt"
-    )
-
-    dictionary = load_dictionary(dictionary_path)
-
-    # Ciphertext to attack
-    ciphertext = "KHOOR ZRUOG"
-
-    # Perform brute-force dictionary attack
-    result = attack_dictionary(ciphertext, dictionary)
-
-    # Display result
-    print("Predicted Key:", result["predicted_key"])
-    print("Plaintext:", result["predicted_plaintext"])
-    print("Dictionary Score:", result["score"])
-
-    print("\nScores for all keys:")
-
-    for key, score in result["all_scores"].items():
-        print(f"Key {key:2}: {score:.3f}")
-
+    main()

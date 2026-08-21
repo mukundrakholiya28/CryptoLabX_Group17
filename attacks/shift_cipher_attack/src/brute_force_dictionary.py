@@ -1,41 +1,43 @@
+"""
+Brute-Force Cryptanalysis with Dictionary Scoring
+"""
+
 import string
 from shift_cipher import decrypt
 
-with open("attacks\\shift_cipher_attack\\dictionary\\english_words.txt", "r") as file:
-    dictionary = set()
 
-    for word in file:
-        word = word.strip().lower()
-        dictionary.add(word)
+def load_dictionary(filepath: str) -> set:
+    """Loads wordlist into a hash set for O(1) membership lookups."""
+    with open(filepath, "r", encoding="utf-8") as f:
+        return {line.strip().lower() for line in f if line.strip()}
 
 
-def dictionary_score(text):
-    score = 0
-
-    words = text.split()
-
-    for word in words:
-        word = word.strip(string.punctuation).lower()
-
-        if word in dictionary:
-            score += 1
-
-    return score
-
-def brute_force_attack(ciphertext):
+def attack_dictionary(ciphertext: str, dictionary: set) -> dict:
     best_key = 0
-    best_score = 0
-    best_plaintext = ""
+    best_score = -1.0
+    best_text = ""
+    scores = {}
 
-    for key in range(26):
-        plaintext = decrypt(ciphertext, key)
+    for k in range(26):
+        decrypted = decrypt(ciphertext, k)
+        clean_text = decrypted.translate(str.maketrans("", "", string.punctuation))
+        tokens = [w.lower() for w in clean_text.split() if w.isalpha()]
 
-        score = dictionary_score(plaintext)
+        if not tokens:
+            score = 0.0
+        else:
+            valid_words = sum(1 for token in tokens if token in dictionary)
+            score = valid_words / len(tokens)
 
+        scores[k] = score
         if score > best_score:
             best_score = score
-            best_key = key
-            best_plaintext = plaintext
+            best_key = k
+            best_text = decrypted
 
-    return best_key, best_plaintext, best_score
-
+    return {
+        "predicted_key": best_key,
+        "predicted_plaintext": best_text,
+        "score": best_score,
+        "all_scores": scores
+    }

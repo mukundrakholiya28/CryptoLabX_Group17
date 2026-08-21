@@ -1,30 +1,21 @@
-def encrypt(text, key):
-    result = ""
+"""
+Shift Cipher Implementation (Encryption and Decryption)
+"""
 
-    for i in range(len(text)):
-        ch = text[i]
-
-        if ch.isalpha():
-            x = ord(ch.upper()) - ord('A')
-            encrypted = (x + key) % 26
-            result += chr(encrypted + ord('A'))
+def encrypt(plaintext: str, key: int) -> str:
+    """Encrypts plaintext using Caesar shift key k (0-25)."""
+    result = []
+    key = key % 26
+    for char in plaintext:
+        if char.isupper():
+            result.append(chr((ord(char) - ord('A') + key) % 26 + ord('A')))
+        elif char.islower():
+            result.append(chr((ord(char) - ord('a') + key) % 26 + ord('a')))
         else:
-            result += ch
+            result.append(char)
+    return "".join(result)
 
-    return result
 
-
-def decrypt(text, key):
-    result = ""
-
-    for i in range(len(text)):
-        ch = text[i]
-
-        if ch.isalpha():
-            x = ord(ch.upper()) - ord('A')
-            decrypted = (x - key) % 26
-            result += chr(decrypted + ord('A'))
-        else:
-            result += ch
-
-    return result
+def decrypt(ciphertext: str, key: int) -> str:
+    """Decrypts ciphertext using Caesar shift key k (0-25)."""
+    return encrypt(ciphertext, -key)

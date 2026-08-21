@@ -1,3 +1,7 @@
+"""
+Statistical Cryptanalysis of Shift Cipher using Chi-Square Goodness-of-Fit
+"""
+
 from collections import Counter
 from shift_cipher import decrypt
 
