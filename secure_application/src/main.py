@@ -17,7 +17,7 @@ def student_dashboard(student_id):
         choice = input("Enter your choice: ")
 
         if choice == "1":
-            # INTENTIONALLY VULNERABLE: IDOR
+            
             target_id = input(
                 "Enter student ID whose grades you want to view: "
             )
@@ -25,8 +25,7 @@ def student_dashboard(student_id):
             view_grades(target_id)
 
         elif choice == "2":
-            # INTENTIONALLY VULNERABLE:
-            # Allows authenticated user to modify another student's profile.
+
             target_id = input(
                 "Enter student ID whose profile you want to update: "
             )
