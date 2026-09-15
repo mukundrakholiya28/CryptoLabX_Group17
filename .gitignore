@@ -45,3 +45,10 @@ outputs/*.txt
 # Temporary files
 *.tmp
 *.temp
+
+# C/C++ Binaries
+*.exe
+*.o
+*.obj
+*.out
+bin/

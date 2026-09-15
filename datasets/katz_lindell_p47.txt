@@ -1,0 +1,16 @@
+Modern Cryptography - Katz and Lindell (Page 47 Excerpt)
+
+Chapter 2: Perfectly Secret Encryption and Fundamental Limitations
+
+In this chapter, we develop the theoretical foundations of private-key cryptography in a rigorous mathematical framework. The first rigorous definition of secure encryption was proposed by Claude Shannon in his landmark paper published in nineteen forty-nine. Shannon was interested in defining what it means for an encryption scheme to be completely unbreakable, regardless of the computational power or time invested by an eavesdropping adversary. We refer to this notion as perfect secrecy or information-theoretic security.
+
+Consider a sender who wishes to communicate a message to a receiver over an insecure communication channel. An adversary who listens to the channel observes the transmitted ciphertext. The essential intuition underlying perfect secrecy is that observing the ciphertext should reveal no information whatsoever regarding the underlying plaintext message. More formally, the adversary's a posteriori belief regarding the plaintext after having observed the ciphertext should remain identical to their a priori belief prior to observing the ciphertext.
+
+Definition of Perfect Secrecy:
+An encryption scheme over a message space with key generation, encryption, and decryption algorithms is perfectly secret if for every probability distribution over the message space, every message m, and every ciphertext c with non-zero probability, the conditional probability that the message equals m given that the ciphertext equals c is strictly equal to the unconditional probability that the message equals m.
+
+An equivalent formulation asserts that for every pair of messages m zero and m one belonging to the message space, and for every ciphertext c, the probability that the encryption of m zero yields c equals the probability that the encryption of m one yields c. This equivalence highlights that an adversary cannot distinguish which of the two candidate messages was encrypted, even when possessing arbitrary computational resources.
+
+The premier construction satisfying perfect secrecy is the One-Time Pad, invented by Gilbert Vernam in nineteen seventeen. In the One-Time Pad, the key is an entirely random bit string of identical length to the message string. The encryption operation computes the bitwise exclusive-or of the message and the key, producing a ciphertext that is uniformly distributed across the ciphertext space. Decryption proceeds by computing the bitwise exclusive-or between the ciphertext and the key, recovering the original message with zero error.
+
+However, Shannon established an inherent and fundamental limitation of perfect secrecy: for any perfectly secret encryption scheme, the key space must be at least as large as the message space. In practical terms, this implies that the secret key must be at least as long as the plaintext message to be transmitted, and each key can securely encrypt only a single message before being discarded. Consequently, perfect secrecy is impractical for general large-scale communication, motivating the study of computational security and modern cryptography.
