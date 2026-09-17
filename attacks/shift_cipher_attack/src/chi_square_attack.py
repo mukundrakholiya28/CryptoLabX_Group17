@@ -3,7 +3,7 @@ Statistical Cryptanalysis of Shift Cipher using Chi-Square Goodness-of-Fit
 """
 
 from collections import Counter
-from shift_cipher import decrypt
+from .shift_cipher import decrypt
 
 ENGLISH_FREQ = {
     'A': 0.08167, 'B': 0.01492, 'C': 0.02782, 'D': 0.04253, 'E': 0.12702,
