@@ -52,3 +52,6 @@ outputs/*.txt
 *.obj
 *.out
 bin/
+
+# Lab manuals (do not track)
+docs/LAB_MANUAL_*.md
