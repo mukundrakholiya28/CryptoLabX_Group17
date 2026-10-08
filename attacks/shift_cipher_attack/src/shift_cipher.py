@@ -17,5 +17,5 @@ def encrypt(plaintext: str, key: int) -> str:
 
 
 def decrypt(ciphertext: str, key: int) -> str:
-    """Decrypts ciphertext using Caesar shift key k (0-25)."""
+
     return encrypt(ciphertext, -key)
