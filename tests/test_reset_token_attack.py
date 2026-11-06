@@ -61,3 +61,4 @@ class TestTokenPredictionAttack:
     def test_invalid_token_hex_raises_error(self):
         with pytest.raises(ValueError, match="must be exactly 16 bytes"):
             predict_reset_token("abcd", approx_timestamp=1700000000)
+

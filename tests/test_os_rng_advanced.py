@@ -105,3 +105,4 @@ class TestFullAdvancedBattery:
         assert "dft_spectral" in results
         assert "approx_entropy" in results
         assert results["shannon_entropy"] > 7.9
+

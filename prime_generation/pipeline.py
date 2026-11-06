@@ -139,3 +139,4 @@ def benchmark_generation(
         }
 
     return stats
+

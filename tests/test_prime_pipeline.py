@@ -64,3 +64,4 @@ class TestPrimeVerifier:
         res = verify_prime_candidate(p, expected_bit_length=512)
         assert res.bit_length_valid is False
         assert res.overall_verified is False
+
