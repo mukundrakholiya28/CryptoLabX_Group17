@@ -1,0 +1,40 @@
+"""
+CryptoLabX — OS Random Number Generation and Statistical Analysis Package
+Group 17: Mukund Rakholiya (2024UCP1163) & Lakshay Ahuja (2024UCP1157)
+"""
+
+from analysis.os_rng.generator import (
+    generate_windows_cng_bytes,
+    generate_openssl_rand_bytes,
+    generate_linux_urandom_bytes,
+    generate_mt19937_bytes,
+    generate_all_datasets,
+)
+from analysis.os_rng.metrics import (
+    ByteFreqResult,
+    BitDistResult,
+    PatternResult,
+    byte_frequency_distribution,
+    bit_distribution,
+    serial_correlation,
+    compute_autocorrelation_vector,
+    repeated_patterns_analysis,
+    analyze_dataset,
+)
+
+__all__ = [
+    "generate_windows_cng_bytes",
+    "generate_openssl_rand_bytes",
+    "generate_linux_urandom_bytes",
+    "generate_mt19937_bytes",
+    "generate_all_datasets",
+    "ByteFreqResult",
+    "BitDistResult",
+    "PatternResult",
+    "byte_frequency_distribution",
+    "bit_distribution",
+    "serial_correlation",
+    "compute_autocorrelation_vector",
+    "repeated_patterns_analysis",
+    "analyze_dataset",
+]
