@@ -21,6 +21,16 @@ from analysis.os_rng.metrics import (
     repeated_patterns_analysis,
     analyze_dataset,
 )
+from analysis.os_rng.statistical_tests import (
+    TestResult,
+    shannon_entropy,
+    runs_test,
+    longest_run_ones_test,
+    discrete_fourier_transform_test,
+    approximate_entropy_test,
+    run_advanced_statistical_battery,
+)
+from analysis.os_rng.cli import run_comparative_cli
 
 __all__ = [
     "generate_windows_cng_bytes",
@@ -37,4 +47,12 @@ __all__ = [
     "compute_autocorrelation_vector",
     "repeated_patterns_analysis",
     "analyze_dataset",
+    "TestResult",
+    "shannon_entropy",
+    "runs_test",
+    "longest_run_ones_test",
+    "discrete_fourier_transform_test",
+    "approximate_entropy_test",
+    "run_advanced_statistical_battery",
+    "run_comparative_cli",
 ]
