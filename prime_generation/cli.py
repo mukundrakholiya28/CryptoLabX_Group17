@@ -5,7 +5,9 @@ Author: Lakshay Ahuja (2024UCP1157)
 Assignment: 8 - Prime Generation Using Miller-Rabin
 """
 
+import os
 import sys
+sys.path.append(os.path.abspath("."))
 from prime_generation.pipeline import generate_512bit_prime, benchmark_generation
 from prime_generation.verifier import verify_prime_candidate
 

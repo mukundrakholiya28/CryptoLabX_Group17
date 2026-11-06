@@ -193,7 +193,25 @@ def build_assignment_10_notebook():
             "print(f\"Cryptographic Verification Status: {'SUCCESS' if is_valid else 'FAILED'}\")"
         ),
         nbf.v4.new_markdown_cell(
-            "## 5. Mathematical Theory & Cryptanalysis\n"
+            "## 5. Part B: Predictable Password Reset Token Attack\n"
+            "A simulated web application generates a 16-byte token using MT19937 seeded with the integer Unix timestamp.\n"
+            "The attacker observes the token and tests timestamps within [T - 300, T + 300]:"
+        ),
+        nbf.v4.new_code_cell(
+            "from attacks.reset_token_attack import generate_reset_token, predict_reset_token, verify_token_match\n\n"
+            "# 1. Application generates token\n"
+            "actual_t, token_hex, token_bytes = generate_reset_token()\n"
+            "print(f'Generated Token (Hex): {token_hex}')\n"
+            "print(f'Generation Timestamp : {actual_t}')\n\n"
+            "# 2. Attacker launches time-window attack (+125s skew)\n"
+            "res = predict_reset_token(token_hex, approx_timestamp=actual_t + 125, window_seconds=300)\n"
+            "print('\\n' + res.summary())\n\n"
+            "# 3. Verification\n"
+            "print(f'Timestamp Recovered Accurately: {res.recovered_timestamp == actual_t}')\n"
+            "print(f'Regenerated Token Verified   : {verify_token_match(res.recovered_timestamp, token_hex)}')"
+        ),
+        nbf.v4.new_markdown_cell(
+            "## 6. Mathematical Theory & Cryptanalysis\n"
             "See `docs/LAB_MANUAL_ASSIGNMENT_10.md` for complete derivations.\n\n"
             "### Known Plaintext Keystream Equation\n"
             "$$C_i = P_i \\oplus K_i \\implies K_i = P_i \\oplus C_i$$\n\n"
